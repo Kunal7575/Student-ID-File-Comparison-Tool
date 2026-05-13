@@ -32,11 +32,27 @@ document.querySelectorAll(".browse-btn").forEach(button => {
 });
 
 mainFileInput.addEventListener("change", () => {
-  mainFileName.textContent = mainFileInput.files[0]?.name || "No file selected";
+  const file = mainFileInput.files[0];
+
+  if (file) {
+    mainFileName.textContent = file.name;
+    mainDropZone.classList.add("file-added");
+  } else {
+    mainFileName.textContent = "No file selected";
+    mainDropZone.classList.remove("file-added");
+  }
 });
 
 secondaryFileInput.addEventListener("change", () => {
-  secondaryFileName.textContent = secondaryFileInput.files[0]?.name || "No file selected";
+  const file = secondaryFileInput.files[0];
+
+  if (file) {
+    secondaryFileName.textContent = file.name;
+    secondaryDropZone.classList.add("file-added");
+  } else {
+    secondaryFileName.textContent = "No file selected";
+    secondaryDropZone.classList.remove("file-added");
+  }
 });
 
 compareBtn.addEventListener("click", async () => {
@@ -143,6 +159,8 @@ function setupDropZone(dropZone, input, fileNameLabel) {
 
   dropZone.addEventListener("drop", event => {
     event.preventDefault();
+
+    // Remove drag hover effect
     dropZone.classList.remove("dragover");
 
     const file = event.dataTransfer.files[0];
@@ -150,6 +168,7 @@ function setupDropZone(dropZone, input, fileNameLabel) {
     if (!file) return;
 
     const allowedExtensions = [".xlsx", ".xls", ".csv"];
+
     const fileName = file.name.toLowerCase();
 
     const isAllowed = allowedExtensions.some(extension =>
@@ -161,8 +180,14 @@ function setupDropZone(dropZone, input, fileNameLabel) {
       return;
     }
 
+    // Assign dropped file
     input.files = event.dataTransfer.files;
+
+    // Show file name
     fileNameLabel.textContent = file.name;
+
+    // Turn upload box green
+    dropZone.classList.add("file-added");
   });
 }
 
