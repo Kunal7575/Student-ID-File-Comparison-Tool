@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student ID File Comparison Tool</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <div class="page-bg"></div>
+  <div class="overlay"></div>
+
+  <header class="topbar">
+    <img src="logo.png" alt="University of Guelph Logo" class="logo" />
+  </header>
+
+  <main class="container">
+    <section class="hero-card">
+      <div class="hero-text">
+        <p class="eyebrow">Office of Registrarial Services</p>
+        <h1>Student ID File Comparison Tool</h1>
+        <p>
+          Upload the main file and the secondary file. The tool checks whether every student in the secondary file exists in the main file.
+        </p>
+      </div>
+
+      <img src="gryph2.png" alt="Gryphon mascot" class="mascot" />
+    </section>
+
+    <section class="tool-card">
+      <div class="upload-grid">
+        <div class="upload-box">
+          <label for="mainFile">Main / Big Excel File</label>
+          <input type="file" id="mainFile" accept=".xlsx,.xls,.csv" />
+          <p>The full master file.</p>
+        </div>
+
+        <div class="upload-box">
+          <label for="secondaryFile">Secondary / Smaller Excel File</label>
+          <input type="file" id="secondaryFile" accept=".xlsx,.xls,.csv" />
+          <p>The smaller file that must exist in the main file.</p>
+        </div>
+      </div>
+
+      <button id="compareBtn">Compare Files</button>
+
+      <div id="message" class="message hidden"></div>
+
+      <div id="summary" class="summary hidden">
+        <div>
+          <span>Main file records</span>
+          <strong id="mainCount">0</strong>
+        </div>
+        <div>
+          <span>Secondary file records</span>
+          <strong id="secondaryCount">0</strong>
+        </div>
+        <div>
+          <span>Missing records</span>
+          <strong id="missingCount">0</strong>
+        </div>
+      </div>
+
+      <button id="downloadBtn" class="hidden secondary-btn">Download Missing Records Excel</button>
+
+      <div id="previewSection" class="preview hidden">
+        <h2>Missing Records Preview</h2>
+        <div class="table-wrapper">
+          <table id="previewTable"></table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
