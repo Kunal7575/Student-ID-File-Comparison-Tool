@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student ID File Comparison Tool</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- SheetJS for Excel reading/writing -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 
@@ -22,7 +25,7 @@
         <p class="eyebrow">Office of Registrarial Services</p>
         <h1>Student ID File Comparison Tool</h1>
         <p>
-          Upload the main file and the secondary file. The tool checks whether every student in the secondary file exists in the main file.
+          Upload the main file and the secondary file. This tool checks whether every student in the secondary file exists in the main file.
         </p>
       </div>
 
@@ -31,16 +34,32 @@
 
     <section class="tool-card">
       <div class="upload-grid">
-        <div class="upload-box">
-          <label for="mainFile">Main / Big Excel File</label>
-          <input type="file" id="mainFile" accept=".xlsx,.xls,.csv" />
-          <p>The full master file.</p>
+        <div class="upload-box drop-zone" id="mainDropZone">
+          <input type="file" id="mainFile" accept=".xlsx,.xls,.csv" hidden />
+
+          <div class="upload-icon">⬆</div>
+          <label>Main / Big Excel File</label>
+          <p>Drag and drop the full master file here</p>
+
+          <button type="button" class="browse-btn" data-target="mainFile">
+            Browse File
+          </button>
+
+          <span id="mainFileName" class="file-name">No file selected</span>
         </div>
 
-        <div class="upload-box">
-          <label for="secondaryFile">Secondary / Smaller Excel File</label>
-          <input type="file" id="secondaryFile" accept=".xlsx,.xls,.csv" />
-          <p>The smaller file that must exist in the main file.</p>
+        <div class="upload-box drop-zone" id="secondaryDropZone">
+          <input type="file" id="secondaryFile" accept=".xlsx,.xls,.csv" hidden />
+
+          <div class="upload-icon">⬆</div>
+          <label>Secondary / Smaller Excel File</label>
+          <p>Drag and drop the smaller file here</p>
+
+          <button type="button" class="browse-btn" data-target="secondaryFile">
+            Browse File
+          </button>
+
+          <span id="secondaryFileName" class="file-name">No file selected</span>
         </div>
       </div>
 
@@ -53,20 +72,25 @@
           <span>Main file records</span>
           <strong id="mainCount">0</strong>
         </div>
+
         <div>
           <span>Secondary file records</span>
           <strong id="secondaryCount">0</strong>
         </div>
+
         <div>
           <span>Missing records</span>
           <strong id="missingCount">0</strong>
         </div>
       </div>
 
-      <button id="downloadBtn" class="hidden secondary-btn">Download Missing Records Excel</button>
+      <button id="downloadBtn" class="hidden secondary-btn">
+        Download Missing Records Excel
+      </button>
 
       <div id="previewSection" class="preview hidden">
         <h2>Missing Records Preview</h2>
+
         <div class="table-wrapper">
           <table id="previewTable"></table>
         </div>
