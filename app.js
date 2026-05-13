@@ -2,6 +2,13 @@ let missingRecords = [];
 
 const mainFileInput = document.getElementById("mainFile");
 const secondaryFileInput = document.getElementById("secondaryFile");
+
+const mainDropZone = document.getElementById("mainDropZone");
+const secondaryDropZone = document.getElementById("secondaryDropZone");
+
+const mainFileName = document.getElementById("mainFileName");
+const secondaryFileName = document.getElementById("secondaryFileName");
+
 const compareBtn = document.getElementById("compareBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 
@@ -13,6 +20,24 @@ const previewTable = document.getElementById("previewTable");
 const mainCount = document.getElementById("mainCount");
 const secondaryCount = document.getElementById("secondaryCount");
 const missingCount = document.getElementById("missingCount");
+
+setupDropZone(mainDropZone, mainFileInput, mainFileName);
+setupDropZone(secondaryDropZone, secondaryFileInput, secondaryFileName);
+
+document.querySelectorAll(".browse-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    const targetId = button.dataset.target;
+    document.getElementById(targetId).click();
+  });
+});
+
+mainFileInput.addEventListener("change", () => {
+  mainFileName.textContent = mainFileInput.files[0]?.name || "No file selected";
+});
+
+secondaryFileInput.addEventListener("change", () => {
+  secondaryFileName.textContent = secondaryFileInput.files[0]?.name || "No file selected";
+});
 
 compareBtn.addEventListener("click", async () => {
   resetUI();
@@ -31,6 +56,14 @@ compareBtn.addEventListener("click", async () => {
 
     if (mainData.length === 0 || secondaryData.length === 0) {
       showMessage("One of the files appears to be empty.", "error");
+      return;
+    }
+
+    if (secondaryData.length > mainData.length) {
+      showMessage(
+        "Warning: The secondary file has more records than the main file. Please check if the files were uploaded in the wrong order.",
+        "warning"
+      );
       return;
     }
 
@@ -62,16 +95,26 @@ compareBtn.addEventListener("click", async () => {
     summaryBox.classList.remove("hidden");
 
     if (missingRecords.length === 0) {
-      showMessage("Congrats, all secondary records exist in the main file. No missing records found.", "success");
+      showMessage(
+        "Congrats, all secondary records exist in the main file. No missing records found.",
+        "success"
+      );
     } else {
-      showMessage(`${missingRecords.length} missing record(s) found. You can download the report below.`, "warning");
+      showMessage(
+        `${missingRecords.length} missing record(s) found. You can download the report below.`,
+        "warning"
+      );
+
       downloadBtn.classList.remove("hidden");
       showPreview(missingRecords);
     }
 
   } catch (error) {
     console.error(error);
-    showMessage("Something went wrong while reading the files. Please check the Excel format and try again.", "error");
+    showMessage(
+      "Something went wrong while reading the files. Please check the Excel format and try again.",
+      "error"
+    );
   }
 });
 
@@ -87,6 +130,41 @@ downloadBtn.addEventListener("click", () => {
   XLSX.utils.book_append_sheet(workbook, worksheet, "Missing Records");
   XLSX.writeFile(workbook, "missing_records_report.xlsx");
 });
+
+function setupDropZone(dropZone, input, fileNameLabel) {
+  dropZone.addEventListener("dragover", event => {
+    event.preventDefault();
+    dropZone.classList.add("dragover");
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragover");
+  });
+
+  dropZone.addEventListener("drop", event => {
+    event.preventDefault();
+    dropZone.classList.remove("dragover");
+
+    const file = event.dataTransfer.files[0];
+
+    if (!file) return;
+
+    const allowedExtensions = [".xlsx", ".xls", ".csv"];
+    const fileName = file.name.toLowerCase();
+
+    const isAllowed = allowedExtensions.some(extension =>
+      fileName.endsWith(extension)
+    );
+
+    if (!isAllowed) {
+      showMessage("Please upload only Excel or CSV files.", "error");
+      return;
+    }
+
+    input.files = event.dataTransfer.files;
+    fileNameLabel.textContent = file.name;
+  });
+}
 
 function readExcelFile(file) {
   return new Promise((resolve, reject) => {
@@ -126,12 +204,17 @@ function findStudentIdColumn(data) {
     "student id",
     "student number",
     "student number #",
-    "id",
-    "studentid"
+    "studentid",
+    "studentnumber",
+    "id"
   ];
 
   return columns.find(column => {
-    const cleanedColumn = column.toLowerCase().replace(/\s+/g, " ").trim();
+    const cleanedColumn = column
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+
     const compactColumn = cleanedColumn.replace(/[^a-z0-9]/g, "");
 
     return (
@@ -144,9 +227,16 @@ function findStudentIdColumn(data) {
 function cleanStudentId(value) {
   if (value === null || value === undefined) return "";
 
-  return String(value)
+  let id = String(value)
+    .trim()
     .replace(/\.0$/, "")
-    .trim();
+    .replace(/\s+/g, "");
+
+  id = id.replace(/[^0-9]/g, "");
+
+  id = id.replace(/^0+/, "");
+
+  return id;
 }
 
 function showMessage(text, type) {
