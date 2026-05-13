@@ -51,7 +51,27 @@ body {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   margin-bottom: 24px;
 }
+.drop-zone.file-added {
+  border-color: #1f9d55;
+  background: #ecfdf3;
+}
 
+.drop-zone.file-added .upload-icon {
+  color: #1f9d55;
+}
+
+.drop-zone.file-added .browse-btn {
+  background: #1f9d55;
+  color: white;
+}
+
+.drop-zone.file-added .browse-btn:hover {
+  background: #157347;
+}
+
+.drop-zone.file-added .file-name {
+  color: #157347;
+}
 .eyebrow {
   color: #9b0d16;
   font-weight: 800;
