@@ -13,7 +13,7 @@ body {
   position: fixed;
   inset: 0;
   background:
-    linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.35)),
+    linear-gradient(120deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.38)),
     url("background.png") center/cover no-repeat;
   z-index: -2;
 }
@@ -47,7 +47,7 @@ body {
   gap: 28px;
   padding: 36px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   margin-bottom: 24px;
 }
@@ -79,7 +79,7 @@ h1 {
 }
 
 .tool-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 24px;
   padding: 30px;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
@@ -93,26 +93,52 @@ h1 {
 }
 
 .upload-box {
-  border: 2px dashed #c9c9c9;
   border-radius: 18px;
   padding: 22px;
   background: #fafafa;
 }
 
+.drop-zone {
+  min-height: 220px;
+  text-align: center;
+  border: 2px dashed #9b0d16;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-zone.dragover {
+  background: #fff4d6;
+  border-color: #ffcc33;
+}
+
+.upload-icon {
+  font-size: 38px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  color: #9b0d16;
+}
+
 .upload-box label {
   display: block;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .upload-box p {
   color: #666;
-  margin-bottom: 0;
+  margin: 0 0 12px;
 }
 
-input[type="file"] {
-  width: 100%;
+.file-name {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #555;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 button {
@@ -128,6 +154,11 @@ button {
 
 button:hover {
   background: #7f0a12;
+}
+
+.browse-btn {
+  background: #111;
+  box-shadow: none;
 }
 
 .secondary-btn {
@@ -234,5 +265,9 @@ th {
 
   .mascot {
     width: 150px;
+  }
+
+  .tool-card {
+    padding: 22px;
   }
 }
